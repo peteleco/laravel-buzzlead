@@ -1,0 +1,42 @@
+{
+  "name": "peteleco/laravel-buzzlead",
+  "description": "Laravel package to integrate with Buzzlead API.",
+  "type": "laravel, buzzlead, sales track.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Leonardo Jorge",
+      "email": "ldiascarmo@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.1",
+    "illuminate/bus": "~5.4.0",
+    "illuminate/console": "~5.4.0",
+    "illuminate/database": "~5.4.0",
+    "illuminate/support": "~5.4.0",
+    "guzzlehttp/guzzle" : "^6.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.0",
+    "mockery/mockery": "^0.9.4",
+    "doctrine/dbal": "^2.5.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Peteleco\\Buzzlead\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Peteleco\\Buzzlead\\Test\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Peteleco\\Buzzlead\\BuzzleadServiceProvider"
+      ]
+    }
+  }
+}

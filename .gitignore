@@ -1,0 +1,9 @@
+build
+docs
+vendor
+tests/temp
+composer.lock
+
+/vendor
+/.idea
+.env
