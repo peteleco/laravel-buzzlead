@@ -30,20 +30,6 @@ class ConversionRequestTest extends TestCase
         $this->voucher = $this->createAmbassador();
     }
 
-    private function createAmbassador()
-    {
-        $api = new CreateAmbassadorRequest($this->config['buzzlead']);
-
-        $api->setSourceForm($sourceForm = new SourceForm([
-            'name'  => $this->faker->name(),
-            'email' => $this->faker->email()
-        ]));
-
-        $response = $api->send();
-
-        return $response->getVoucher();
-    }
-
     /**
      * @test
      */

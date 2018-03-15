@@ -14,12 +14,14 @@ abstract class ApiResponse
      * @var string
      */
     protected $message;
-
+    /**
+     * @var
+     */
+    protected $data;
     /**
      * @var int
      */
     private $statusCode;
-
     /**
      * @var null|string
      */
@@ -93,7 +95,28 @@ abstract class ApiResponse
     }
 
     /**
+     * @return mixed
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @param mixed $data
+     *
+     * @return ApiResponse
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
      * Set response attributes
+     *
      * @param $json
      */
     protected function setAttributes($json)

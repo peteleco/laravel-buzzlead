@@ -2,10 +2,15 @@
 
 use Peteleco\Buzzlead\Exceptions\RequestFailedException;
 
-class ConversionResponse extends ApiResponse
+/**
+ * Class ConfirmConversionResponse
+ *
+ * @package Peteleco\Buzzlead\Api\Response
+ */
+class ConfirmConversionResponse extends ApiResponse
 {
 
-    public function handle(?string $contents): ConversionResponse
+    public function handle(?string $contents)
     {
         $json = \GuzzleHttp\json_decode($contents);
 
@@ -18,6 +23,8 @@ class ConversionResponse extends ApiResponse
         if (! $this->hasSuccess()) {
             throw new RequestFailedException($this->getMessage());
         }
+
+        $this->setData($json->data);
 
         return $this;
     }

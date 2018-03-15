@@ -83,11 +83,12 @@ abstract class ApiRequest
     public function getUrl(): string
     {
         preg_match_all('#{(.*?)}#m', $this->path, $matches);
+        $url = $this->path;
         foreach ($matches[0] as $index => $param) {
             if (! property_exists($this, $matches[1][$index])) {
                 throw new UndefinedUrlPropertyException($matches[1][$index]);
             }
-            $url = str_replace($param, $this->{$matches[1][$index]}, $this->path);
+            $url = str_replace($param, $this->{$matches[1][$index]}, $url);
         }
 
         return $url;
