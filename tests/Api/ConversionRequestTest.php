@@ -53,8 +53,8 @@ class ConversionRequestTest extends TestCase
             'codigo' => $this->voucher,
             'pedido' => $this->faker->uuid,
             'total'  => 151.10,
-            'nome'   => $this->faker->name,
-            'email'  => $this->faker->email,
+//            'nome'   => $this->faker->name,
+//            'email'  => $this->faker->email,
         ]));
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());

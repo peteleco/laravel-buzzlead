@@ -11,10 +11,10 @@ class Buzzlead
     static public function tracker()
     {
         if (self::isSandboxMode()) {
-            return '<script src="' . self::config()['scripts']['sandbox'] . '"></script>';
+            return '<script src="' . self::config()['script']['sandbox'] . '" async></script>';
         }
 
-        return '<script src="' . self::config()['scripts']['production'] . '"></script>';
+        return '<script src="' . self::config()['script']['production'] . '" async></script>';
     }
 
     /**
