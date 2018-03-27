@@ -33,8 +33,18 @@ class CreateAmbassadorResponse extends ApiResponse
             throw new RequestFailedException($this->getMessage());
         }
 
-        if (! $this->hasSuccess()) {
-            throw new RequestFailedException($this->getMessage());
+        if (! $this->isSuccess()) {
+            if (! isset($json->notification)) {
+                throw new RequestFailedException($this->getMessage());
+            }
+            if (isset($json->notification) && empty(get_object_vars($json->notification))) {
+                throw new RequestFailedException($this->getMessage());
+            }
+            if (isset($json->notification) && isset($json->notification->hashid)) {
+                $this->setVoucher($json->notification->hashid);
+
+                return $this;
+            }
         }
 
         // Set data response

@@ -4,12 +4,14 @@ namespace Peteleco\Buzzlead\Test\Api;
 
 use GuzzleHttp\Exception\ClientException;
 use Peteleco\Buzzlead\Api\ConversionRequest;
-use Peteleco\Buzzlead\Api\CreateAmbassadorRequest;
+use Peteleco\Buzzlead\Exceptions\OrderAlreadyConvertedException;
 use Peteleco\Buzzlead\Exceptions\RequestFailedException;
 use Peteleco\Buzzlead\Model\OrderForm;
-use Peteleco\Buzzlead\Model\SourceForm;
 use Peteleco\Buzzlead\Test\TestCase;
 
+/**
+ * @property array ambassador
+ */
 class ConversionRequestTest extends TestCase
 {
 
@@ -23,11 +25,16 @@ class ConversionRequestTest extends TestCase
      */
     protected $voucher;
 
+    /**
+     * @var array
+     */
+    protected $ambassador;
+
     public function setUp()
     {
         parent::setUp();
-        $this->config  = app('config');
-        $this->voucher = $this->createAmbassador();
+        $this->config     = app('config');
+        $this->ambassador = $this->createAmbassador();
     }
 
     /**
@@ -50,11 +57,11 @@ class ConversionRequestTest extends TestCase
     {
         $api = new ConversionRequest($this->config['buzzlead']);
         $api->setOrderForm(new OrderForm([
-            'codigo' => $this->voucher,
+            'codigo' => $this->ambassador['voucher'],
             'pedido' => $this->faker->uuid,
             'total'  => 151.10,
-//            'nome'   => $this->faker->name,
-//            'email'  => $this->faker->email,
+            //            'nome'   => $this->faker->name,
+            //            'email'  => $this->faker->email,
         ]));
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());
@@ -68,7 +75,7 @@ class ConversionRequestTest extends TestCase
         $orderId = $this->faker->uuid;
         $api     = new ConversionRequest($this->config['buzzlead']);
         $api->setOrderForm(new OrderForm([
-            'codigo' => $this->voucher,
+            'codigo' => $this->ambassador['voucher'],
             'pedido' => $orderId,
             'total'  => 200,
             'nome'   => $this->faker->name,
@@ -77,8 +84,8 @@ class ConversionRequestTest extends TestCase
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());
 
-        $this->expectException(RequestFailedException::class);
-        $this->expectExceptionMessage('Bônus já confirmado para esse e-mail ou pedido. Não foi contabilizado bônus para essa conversão');
+        $this->expectException(OrderAlreadyConvertedException::class);
+        $this->expectExceptionMessage('Bônus já confirmado para esse e-mail ou pedido. Não foi contabilizado bônus para essa conversão.');
         $api->send();
     }
 
@@ -103,7 +110,7 @@ class ConversionRequestTest extends TestCase
     {
         $api = new ConversionRequest($this->config['buzzlead']);
         $api->setOrderForm(new OrderForm([
-            'codigo' => $this->voucher
+            'codigo' => $this->ambassador['voucher']
         ]));
 
         $this->expectException(RequestFailedException::class);
@@ -112,4 +119,54 @@ class ConversionRequestTest extends TestCase
         $api->send();
     }
 
+    /**
+     * @test
+     */
+    public function it_convert_for_multiple_orders_for_same_customer_from_same_ambassador()
+    {
+
+        $api           = new ConversionRequest($this->config['buzzlead']);
+        $firstOrderId  = $this->faker->uuid;
+        $secondOrderId = $this->faker->uuid;
+//        dump($firstOrderId);
+//        dump($secondOrderId);
+
+        $api->setOrderForm(new OrderForm([
+            'codigo' => $this->ambassador['voucher'],
+            'pedido' => $firstOrderId,
+            'total'  => 200,
+            'nome'   => $name = $this->faker->name,
+            'email'  => $email = $this->faker->email,
+        ]));
+        $response = $api->send();
+        $this->assertTrue($response->hasSuccess());
+
+        $api->setOrderForm(new OrderForm([
+            'codigo' => $this->ambassador['voucher'],
+            'pedido' => $secondOrderId,
+            'total'  => 20,
+            'nome'   => $name,
+            'email'  => $email,
+        ]));
+        $response2 = $api->send();
+        $this->assertTrue($response2->hasSuccess());
+    }
+
+    /**
+     * @test
+     */
+    public function it_ambassador_can_auto_referrer()
+    {
+        $api = new ConversionRequest($this->config['buzzlead']);
+        $api->setOrderForm(new OrderForm([
+            'codigo' => $this->ambassador['voucher'],
+            'pedido' => $this->faker->uuid,
+            'total'  => 200,
+            'nome'   => $this->ambassador['name'],
+            'email'  => $this->ambassador['email'],
+        ]));
+        $response = $api->send();
+
+        $this->assertFalse($response->hasSuccess());
+    }
 }

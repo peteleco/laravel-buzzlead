@@ -30,6 +30,21 @@ abstract class TestCase extends Orchestra
         $this->faker = \Faker\Factory::create();
     }
 
+    public function createConversion($voucher)
+    {
+        $api = new ConversionRequest($this->config['buzzlead']);
+        $api->setOrderForm(new OrderForm([
+            'codigo' => $voucher,
+            'pedido' => $orderId = $this->faker->uuid,
+            'total'  => 151.10,
+            'nome'   => $this->faker->name,
+            'email'  => $this->faker->email,
+        ]));
+        $api->send();
+
+        return $orderId;
+    }
+
     /**
      * @param \Illuminate\Foundation\Application $app
      *
@@ -45,33 +60,23 @@ abstract class TestCase extends Orchestra
     /**
      * Cria um embaixador e retona o voucher id
      *
-     * @return mixed
+     * @return array
      */
-    protected function createAmbassador(): string
+    protected function createAmbassador(): array
     {
         $api = new CreateAmbassadorRequest($this->config['buzzlead']);
 
         $api->setSourceForm($sourceForm = new SourceForm([
-            'name'  => $this->faker->name(),
-            'email' => $this->faker->email()
+            'name'  => $name = $this->faker->name(),
+            'email' => $email = $this->faker->email()
         ]));
 
         $response = $api->send();
 
-        return $response->getVoucher();
-    }
-
-    public function createConversion($voucher)
-    {
-        $api = new ConversionRequest($this->config['buzzlead']);
-        $api->setOrderForm(new OrderForm([
-            'codigo' => $voucher,
-            'pedido' => $orderId = $this->faker->uuid,
-            'total'  => 151.10,
-            'nome'   => $this->faker->name,
-            'email'  => $this->faker->email,
-        ]));
-        $api->send();
-        return $orderId;
+        return [
+            'voucher' => $response->getVoucher(),
+            'name'    => $name,
+            'email'   => $email
+        ];
     }
 }

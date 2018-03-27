@@ -58,12 +58,16 @@ class CreateAmbassadorRequestTest extends TestCase
             'email' => $this->faker->email()
         ]));
 
-        $api->send();
+        $firstResponse = $api->send();
+        $this->assertTrue($firstResponse->isSuccess());
+        $createdVoucher = $firstResponse->getVoucher();
 
-        $this->expectException(RequestFailedException::class);
-        $this->expectExceptionMessage('Já existe link pessoal cadastrado para esta pessoa nesta campanha.');
+//        $this->expectException(RequestFailedException::class);
+//        $this->expectExceptionMessage('Já existe link pessoal cadastrado para esta pessoa nesta campanha.');
         $api->setSourceForm($sourceForm);
-        $api->send();
+        $secondResponse = $api->send();
+        $this->assertFalse($secondResponse->isSuccess());
+        $this->assertEquals($createdVoucher, $secondResponse->getVoucher());
     }
 
     /**
@@ -101,7 +105,8 @@ class CreateAmbassadorRequestTest extends TestCase
             'email' => $this->faker->email()
         ]));
 
-        $this->expectException(\GuzzleHttp\Exception\ServerException::class);
+        $this->expectException(RequestFailedException::class);
+        $this->expectExceptionMessage('Campanha informada não existe');
         $api->send();
     }
 

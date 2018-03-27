@@ -15,12 +15,16 @@ class ConfirmConversionTest extends TestCase
      * @var string Ambassador voucher id
      */
     protected $voucher;
+    /**
+     * @var array
+     */
+    protected $ambassador;
 
     public function setUp()
     {
         parent::setUp();
         $this->config  = app('config');
-        $this->voucher = $this->createAmbassador();
+        $this->ambassador = $this->createAmbassador();
     }
 
     /**
@@ -43,7 +47,7 @@ class ConfirmConversionTest extends TestCase
      */
     public function it_confirm_conversion()
     {
-        $numberRequest = $this->createConversion($this->voucher);
+        $numberRequest = $this->createConversion($this->ambassador['voucher']);
         $api           = new ConfirmConversionRequest($this->config['buzzlead']);
         $response      = $api->setNumberRequest($numberRequest)->send();
 
