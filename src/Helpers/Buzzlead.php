@@ -10,6 +10,9 @@ class Buzzlead
      */
     static public function tracker()
     {
+        if(!self::isEnabled()) {
+            return '';
+        }
         if (self::isSandboxMode()) {
             return '<script src="' . self::config()['script']['sandbox'] . '" async></script>';
         }
@@ -35,5 +38,15 @@ class Buzzlead
     static public function config()
     {
         return config('buzzlead');
+    }
+
+    /**
+     * Verifica se o pacote está ativo
+     *
+     * @return bool
+     */
+    static public function isEnabled(): bool
+    {
+        return self::config()['enabled'];
     }
 }

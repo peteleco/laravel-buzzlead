@@ -4,6 +4,7 @@ namespace Peteleco\Buzzlead\Test\Api;
 
 use GuzzleHttp\Exception\ClientException;
 use Peteleco\Buzzlead\Api\ConversionRequest;
+use Peteleco\Buzzlead\Exceptions\InvalidAffiliateCodeException;
 use Peteleco\Buzzlead\Exceptions\OrderAlreadyConvertedException;
 use Peteleco\Buzzlead\Exceptions\RequestFailedException;
 use Peteleco\Buzzlead\Model\OrderForm;
@@ -168,5 +169,26 @@ class ConversionRequestTest extends TestCase
         $response = $api->send();
 
         $this->assertFalse($response->hasSuccess());
+    }
+
+    /**
+     * @test
+     */
+    public function it_convert_with_invalid_code()
+    {
+        $api = new ConversionRequest($this->config['buzzlead']);
+        $api->setOrderForm(new OrderForm([
+            'codigo' => 'Qwis',
+            'pedido' => $this->faker->uuid,
+            'total'  => 200,
+            'nome'   => $this->faker->name,
+            'email'  => $this->faker->email,
+        ]));
+
+        $this->expectException(InvalidAffiliateCodeException::class);
+        $this->expectExceptionMessage('Código do embaixador inválido.');
+
+        $response = $api->send();
+
     }
 }

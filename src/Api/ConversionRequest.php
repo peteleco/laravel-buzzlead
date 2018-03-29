@@ -42,11 +42,15 @@ class ConversionRequest extends ApiRequest
      */
     public function send()
     {
-        $response = $this->client->post($this->getUrl(), [
-            'debug'                             => false,
-            \GuzzleHttp\RequestOptions::HEADERS => $this->requestHeaders(),
-            \GuzzleHttp\RequestOptions::JSON    => $this->orderForm->toArray()
-        ]);
+        try {
+            $response = $this->client->post($this->getUrl(), [
+                'debug'                             => false,
+                \GuzzleHttp\RequestOptions::HEADERS => $this->requestHeaders(),
+                \GuzzleHttp\RequestOptions::JSON    => $this->orderForm->toArray()
+            ]);
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
+            return $this->handleException($e);
+        }
 
         return $this->handleResponse($response);
     }
@@ -59,6 +63,20 @@ class ConversionRequest extends ApiRequest
     public function handleResponse(?ResponseInterface $response): ApiResponse
     {
         return new ConversionResponse($response->getStatusCode(), $response->getBody()->getContents());
+    }
+
+    /**
+     * @param \GuzzleHttp\Exception\ClientException $exception
+     *
+     * @return ApiResponse
+     */
+    public function handleException(\GuzzleHttp\Exception\ClientException $exception): ApiResponse
+    {
+        if ($exception->getCode() != 404) {
+            throw $exception;
+        }
+
+        return new ConversionResponse($exception->getCode(), $exception->getResponse()->getBody()->getContents());
     }
 
     /**
