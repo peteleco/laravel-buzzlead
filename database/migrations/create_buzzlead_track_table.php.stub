@@ -16,17 +16,20 @@ class CreateBuzzleadTrackTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('voucher')->nullable();
+            $table->string('affiliate_code')->nullable();
         });
 
-        Schema::create('buzzlead_trackers', function (Blueprint $table) {
+        Schema::create('lead_trackers', function (Blueprint $table) {
             $table->increments('id');
             $table->morphs('model');
-            $table->string('voucher');
-            $table->index('voucher');
-            $table->boolean('dispatched');
-            $table->boolean('confirmed');
+            $table->string('affiliate_code');
+            $table->index('affiliate_code');
+            $table->boolean('dispatched')->default(false);
+            $table->index('dispatched');
             $table->timestamp('confirmed_at')->nullable();
+            $table->boolean('invalid')->default(false);
+            $table->text('response')->nullable();
+
             $table->timestamps();
         });
     }
@@ -37,9 +40,9 @@ class CreateBuzzleadTrackTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('voucher');
+            $table->dropColumn('affiliate_code');
         });
 
-        Schema::dropIfExists('buzzlead_trackers');
+        Schema::dropIfExists('lead_trackers');
     }
 }
