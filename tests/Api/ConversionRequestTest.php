@@ -7,6 +7,7 @@ use Peteleco\Buzzlead\Api\ConversionRequest;
 use Peteleco\Buzzlead\Exceptions\InvalidAffiliateCodeException;
 use Peteleco\Buzzlead\Exceptions\OrderAlreadyConvertedException;
 use Peteleco\Buzzlead\Exceptions\RequestFailedException;
+use Peteleco\Buzzlead\Exceptions\SelfIndicationException;
 use Peteleco\Buzzlead\Model\OrderForm;
 use Peteleco\Buzzlead\Test\TestCase;
 
@@ -62,7 +63,7 @@ class ConversionRequestTest extends TestCase
             'pedido' => $this->faker->uuid,
             'total'  => 151.10,
             'nome'   => $this->faker->name,
-            'email'  => $this->faker->email,
+            'email'  => $this->fakeEmail(),
         ]));
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());
@@ -81,7 +82,7 @@ class ConversionRequestTest extends TestCase
             'pedido' => $orderId,
             'total'  => 200,
             'nome'   => $this->faker->name,
-            'email'  => $this->faker->email,
+            'email'  => $this->fakeEmail(),
         ]));
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());
@@ -114,7 +115,7 @@ class ConversionRequestTest extends TestCase
         $api->setOrderForm(new OrderForm([
             'codigo' => $this->ambassador['voucher'],
             'nome'   => $this->faker->name,
-            'email'  => $this->faker->email,
+            'email'  => $this->fakeEmail(),
         ]));
 
         $this->expectException(RequestFailedException::class);
@@ -140,7 +141,7 @@ class ConversionRequestTest extends TestCase
             'pedido' => $firstOrderId,
             'total'  => 200,
             'nome'   => $name = $this->faker->name,
-            'email'  => $email = $this->faker->email,
+            'email'  => $email = $this->fakeEmail(),
         ]));
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());
@@ -171,7 +172,7 @@ class ConversionRequestTest extends TestCase
         ]));
 
 //        $this->assertFalse($response->hasSuccess());
-        $this->expectException(RequestFailedException::class);
+        $this->expectException(SelfIndicationException::class);
         $this->expectExceptionMessage('Não é permitido gerar bônus para o mesmo e-mail da indicação.');
         $response = $api->send();
     }
@@ -187,7 +188,7 @@ class ConversionRequestTest extends TestCase
             'pedido' => $this->faker->uuid,
             'total'  => 200,
             'nome'   => $this->faker->name,
-            'email'  => $this->faker->email,
+            'email'  => $this->fakeEmail(),
         ]));
 
         $this->expectException(InvalidAffiliateCodeException::class);

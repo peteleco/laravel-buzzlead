@@ -55,7 +55,7 @@ class CreateAmbassadorRequestTest extends TestCase
 
         $api->setSourceForm($sourceForm = new SourceForm([
             'name'  => $this->faker->name(),
-            'email' => $this->faker->email()
+            'email' => $this->fakeEmail()
         ]));
 
         $firstResponse = $api->send();
@@ -76,12 +76,12 @@ class CreateAmbassadorRequestTest extends TestCase
     public function it_create_ambassador_with_wrong_email_account()
     {
         $config                 = $this->config['buzzlead'];
-        $config['api']['email'] = 'abcdef@teste.com.br';
+        $config['api']['email'] = $this->fakeEmail();
         $api                    = new CreateAmbassadorRequest($config);
 
         $api->setSourceForm(new SourceForm([
             'name'  => $this->faker->name(),
-            'email' => $this->faker->email()
+            'email' => $this->fakeEmail()
         ]));
 
         $this->expectException(RequestFailedException::class);
@@ -102,7 +102,7 @@ class CreateAmbassadorRequestTest extends TestCase
 
         $api->setSourceForm(new SourceForm([
             'name'  => $this->faker->name(),
-            'email' => $this->faker->email()
+            'email' => $this->fakeEmail()
         ]));
 
         $this->expectException(RequestFailedException::class);
@@ -154,11 +154,13 @@ class CreateAmbassadorRequestTest extends TestCase
 
         $api->setSourceForm($sourceForm = new SourceForm([
             'name'  => $this->faker->name(),
-            'email' => $this->faker->email()
+            'email' => $this->fakeEmail()
         ]));
 
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());
         $this->assertNotEmpty($response->getVoucher());
     }
+
+
 }

@@ -38,7 +38,7 @@ abstract class TestCase extends Orchestra
             'pedido' => $orderId = $this->faker->uuid,
             'total'  => 151.10,
             'nome'   => $this->faker->name,
-            'email'  => $this->faker->email,
+            'email'  => $this->fakeEmail(),
         ]));
         $api->send();
 
@@ -68,7 +68,7 @@ abstract class TestCase extends Orchestra
 
         $api->setSourceForm($sourceForm = new SourceForm([
             'name'  => $name = $this->faker->name(),
-            'email' => $email = $this->faker->email()
+            'email' => $email = $this->fakeEmail()
         ]));
 
         $response = $api->send();
@@ -78,5 +78,20 @@ abstract class TestCase extends Orchestra
             'name'    => $name,
             'email'   => $email
         ];
+    }
+
+    /**
+     * Buzzlead fakeemail
+     * @return string
+     */
+    public function fakeEmail() {
+        return 'fake-' . $this->faker->email();
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_fake_email() {
+        $this->assertTrue((substr($this->fakeEmail(), 0, strlen('fake')) === 'fake'));
     }
 }
