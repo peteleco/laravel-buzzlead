@@ -3,6 +3,7 @@
 namespace Peteleco\Buzzlead\Http\Middleware;
 
 use Closure;
+use Peteleco\Buzzlead\Helpers\Buzzlead;
 
 /**
  * Seta o código do afiliado caso não tenha sido
@@ -22,8 +23,13 @@ class SetAffiliateCodeCookie
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() && ! $request->hasCookie('affiliate_code') && $request->user()->isCustomer() && $request->user()->isAffiliated()) {
-            return $next($request)->withCookie($this->makeAffiliateCookie($request->user()->affiliate_code));
+        if (Buzzlead::isAmbassadorEnabled()) {
+            if ($request->user()
+                && ! $request->hasCookie('affiliate_code')
+                && $request->user()->isCustomer()
+                && $request->user()->isAffiliated()) {
+                return $next($request)->withCookie($this->makeAffiliateCookie($request->user()->affiliate_code));
+            }
         }
 
         return $next($request);

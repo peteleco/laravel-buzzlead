@@ -49,4 +49,17 @@ class Buzzlead
     {
         return self::config()['enabled'];
     }
+
+    /**
+     * Verifica se o sistema de embaixadores(customers)
+     * está ativo
+     * @return bool
+     */
+    static public function isAmbassadorEnabled(): bool
+    {
+        if(!self::isEnabled()) {
+            return false;
+        }
+        return self::config()['enabled_ambassador'];
+    }
 }
