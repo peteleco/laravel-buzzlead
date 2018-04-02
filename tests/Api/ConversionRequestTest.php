@@ -61,17 +61,18 @@ class ConversionRequestTest extends TestCase
             'codigo' => $this->ambassador['voucher'],
             'pedido' => $this->faker->uuid,
             'total'  => 151.10,
-            //            'nome'   => $this->faker->name,
-            //            'email'  => $this->faker->email,
+            'nome'   => $this->faker->name,
+            'email'  => $this->faker->email,
         ]));
         $response = $api->send();
         $this->assertTrue($response->hasSuccess());
     }
 
     /**
+     * Tenta converter o mesmo pedido duas vezes.
      * @test
      */
-    public function it_convert_duplicated_order()
+    public function it_not_convert_duplicated_order()
     {
         $orderId = $this->faker->uuid;
         $api     = new ConversionRequest($this->config['buzzlead']);
@@ -111,7 +112,9 @@ class ConversionRequestTest extends TestCase
     {
         $api = new ConversionRequest($this->config['buzzlead']);
         $api->setOrderForm(new OrderForm([
-            'codigo' => $this->ambassador['voucher']
+            'codigo' => $this->ambassador['voucher'],
+            'nome'   => $this->faker->name,
+            'email'  => $this->faker->email,
         ]));
 
         $this->expectException(RequestFailedException::class);
@@ -166,9 +169,11 @@ class ConversionRequestTest extends TestCase
             'nome'   => $this->ambassador['name'],
             'email'  => $this->ambassador['email'],
         ]));
-        $response = $api->send();
 
-        $this->assertFalse($response->hasSuccess());
+//        $this->assertFalse($response->hasSuccess());
+        $this->expectException(RequestFailedException::class);
+        $this->expectExceptionMessage('Não é permitido gerar bônus para o mesmo e-mail da indicação.');
+        $response = $api->send();
     }
 
     /**
