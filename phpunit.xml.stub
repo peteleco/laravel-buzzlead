@@ -21,7 +21,7 @@
         </whitelist>
     </filter>
     <php>
-        <env name="BUZZLEAD_ENV" value="sandbox"/>
+        <env name="BUZZLEAD_ENV" value=""/>
         <env name="BUZZLEAD_API_TOKEN" value=""/>
         <env name="BUZZLEAD_API_KEY" value=""/>
         <env name="BUZZLEAD_API_EMAIL" value=""/>
