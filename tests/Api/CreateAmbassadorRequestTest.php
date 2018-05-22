@@ -162,5 +162,23 @@ class CreateAmbassadorRequestTest extends TestCase
         $this->assertNotEmpty($response->getVoucher());
     }
 
+    /**
+     * @test Teste com email real para verificar se os email estao sendo enviados
+     *       quando não deveria
+     */
+    public function it_create_ambassador_and_do_not_send_welcome_email()
+    {
+        $api = new CreateAmbassadorRequest($this->config['buzzlead']);
+        $email = $this->config['buzzlead']['test_email_name'] . '+buzzlead_' . microtime() . $this->config['buzzlead']['test_email_domain'];
+        $api->setSourceForm($sourceForm = new SourceForm([
+            'name'  => $this->faker->name(),
+            'email' => $email
+        ]));
+
+        $response = $api->send();
+        $this->assertTrue($response->hasSuccess());
+        $this->assertNotEmpty($response->getVoucher());
+    }
+
 
 }

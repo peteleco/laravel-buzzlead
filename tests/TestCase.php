@@ -30,7 +30,7 @@ abstract class TestCase extends Orchestra
         $this->faker = \Faker\Factory::create();
     }
 
-    public function createConversion($voucher)
+    public function createConversion($voucher, $value = null)
     {
         $api = new ConversionRequest($this->config['buzzlead']);
         $api->setOrderForm(new OrderForm([
@@ -43,6 +43,24 @@ abstract class TestCase extends Orchestra
         $api->send();
 
         return $orderId;
+    }
+
+    /**
+     * Buzzlead fakeemail
+     *
+     * @return string
+     */
+    public function fakeEmail()
+    {
+        return 'fake-' . $this->faker->email();
+    }
+
+    /**
+     * @test
+     */
+    public function it_creates_fake_email()
+    {
+        $this->assertTrue((substr($this->fakeEmail(), 0, strlen('fake')) === 'fake'));
     }
 
     /**
@@ -78,20 +96,5 @@ abstract class TestCase extends Orchestra
             'name'    => $name,
             'email'   => $email
         ];
-    }
-
-    /**
-     * Buzzlead fakeemail
-     * @return string
-     */
-    public function fakeEmail() {
-        return 'fake-' . $this->faker->email();
-    }
-
-    /**
-     * @test
-     */
-    public function it_creates_fake_email() {
-        $this->assertTrue((substr($this->fakeEmail(), 0, strlen('fake')) === 'fake'));
     }
 }

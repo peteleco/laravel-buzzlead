@@ -25,4 +25,6 @@ return [
     ],
     // Quantos dias vai levar para ser processado
     'days_to_proccess'   => env('BUZZLEAD_DAYS_TO_PROCCESS', 10),
+    'test_email_name'    => env('BUZZLEAD_TEST_EMAIL_NAME', 'email'),
+    'test_email_domain'    => env('BUZZLEAD_TEST_EMAIL_DOMAIN', '@dominio.com')
 ];
