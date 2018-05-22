@@ -66,7 +66,7 @@ class CreateAmbassadorRequestTest extends TestCase
 //        $this->expectExceptionMessage('Já existe link pessoal cadastrado para esta pessoa nesta campanha.');
         $api->setSourceForm($sourceForm);
         $secondResponse = $api->send();
-        $this->assertFalse($secondResponse->isSuccess());
+        $this->assertTrue($secondResponse->isSuccess());
         $this->assertEquals($createdVoucher, $secondResponse->getVoucher());
     }
 
