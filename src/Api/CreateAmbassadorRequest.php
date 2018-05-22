@@ -86,9 +86,9 @@ class CreateAmbassadorRequest extends ApiRequest
      */
     public function setSourceForm(SourceForm $sourceForm): CreateAmbassadorRequest
     {
-        if (!filter_var($sourceForm->email, FILTER_VALIDATE_EMAIL)) {
-            throw new InvalidEmailException();
-        }
+//        if (!filter_var($sourceForm->email, FILTER_VALIDATE_EMAIL)) {
+//            throw new InvalidEmailException();
+//        }
 
         $this->sourceForm = $sourceForm;
 
