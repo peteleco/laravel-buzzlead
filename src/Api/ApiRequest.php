@@ -2,7 +2,7 @@
 
 use GuzzleHttp\Client;
 use Peteleco\Buzzlead\Api\Response\ApiResponse;
-use Peteleco\Buzzlead\UndefinedUrlPropertyException;
+use Peteleco\Buzzlead\Exceptions\UndefinedUrlPropertyException;
 use Psr\Http\Message\ResponseInterface;
 
 abstract class ApiRequest

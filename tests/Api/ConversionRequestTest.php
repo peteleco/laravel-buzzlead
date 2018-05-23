@@ -107,22 +107,22 @@ class ConversionRequestTest extends TestCase
     }
 
     /**
-     * @test
+     * @test Nao deve converter sem valor, quando a campanha for monetaria
      */
-    public function it_convert_with_code_only()
-    {
-        $api = new ConversionRequest($this->config['buzzlead']);
-        $api->setOrderForm(new OrderForm([
-            'codigo' => $this->ambassador['voucher'],
-            'nome'   => $this->faker->name,
-            'email'  => $this->fakeEmail(),
-        ]));
-
-        $this->expectException(RequestFailedException::class);
-        $this->expectExceptionMessage('Total não informado. Não foi possível calcular porcentagem de recompensa!');
-
-        $api->send();
-    }
+//    public function it_convert_with_code_only()
+//    {
+//        $api = new ConversionRequest($this->config['buzzlead']);
+//        $api->setOrderForm(new OrderForm([
+//            'codigo' => $this->ambassador['voucher'],
+//            'nome'   => $this->faker->name,
+//            'email'  => $this->fakeEmail(),
+//        ]));
+//
+//        $this->expectException(RequestFailedException::class);
+//        $this->expectExceptionMessage('Total não informado. Não foi possível calcular porcentagem de recompensa!');
+//
+//        $api->send();
+//    }
 
     /**
      * @test

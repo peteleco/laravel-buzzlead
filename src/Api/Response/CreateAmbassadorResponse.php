@@ -72,4 +72,5 @@ class CreateAmbassadorResponse extends ApiResponse
 
         return $this;
     }
+
 }

@@ -123,7 +123,6 @@ class CreateAmbassadorRequestTest extends TestCase
             // 'email' => 'ldiascarmo@gmail.com'
         ]));
 
-
         $api->send();
     }
 
@@ -139,7 +138,7 @@ class CreateAmbassadorRequestTest extends TestCase
 
         $api->setSourceForm(new SourceForm([
             'name'  => $this->faker->name(),
-            'email' => 'ldiascarmo'
+            'email' => ''
         ]));
 
         // $api->send();

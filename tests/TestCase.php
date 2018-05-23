@@ -78,15 +78,20 @@ abstract class TestCase extends Orchestra
     /**
      * Cria um embaixador e retona o voucher id
      *
+     * @param null $email
+     *
      * @return array
      */
-    protected function createAmbassador(): array
+    protected function createAmbassador($email = null): array
     {
+        if(!$email) {
+            $email = $this->fakeEmail();
+        }
         $api = new CreateAmbassadorRequest($this->config['buzzlead']);
 
         $api->setSourceForm($sourceForm = new SourceForm([
             'name'  => $name = $this->faker->name(),
-            'email' => $email = $this->fakeEmail()
+            'email' => $email
         ]));
 
         $response = $api->send();
