@@ -77,7 +77,6 @@ class GetAmbassadorExtractTest extends TestCase
         $response = $api->send();
         $this->assertEquals(2, $response->getConversions()->count(), 'A quantidade de conversões diferem.');
         $this->assertEquals($response->getBalance(), 20);
-
     }
 
 }
