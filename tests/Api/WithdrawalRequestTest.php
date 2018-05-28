@@ -75,14 +75,14 @@ class WithdrawalRequestTest extends TestCase
      */
     public function it_withdrawal_the_same_twice()
     {
-        $ambassador = $this->createAmbassador();
+        $ambassador = $this->createAmbassador('fake-twice@fake.com');
         $orderId1 = $this->createConversion($ambassador['voucher']);
 
         $api = new WithdrawalRequest($this->config['buzzlead']);
         $api->setNumberRequest($orderId1);
         $response = $api->send();
         $this->assertTrue($response->isSuccess());
-
+        
         $this->assertFalse($api->send()->isSuccess());
 
     }
