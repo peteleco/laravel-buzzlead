@@ -40,6 +40,15 @@ class WithdrawalRequest extends ApiRequest
         return $this->handleResponse($response);
     }
 
+    public function handleException(\GuzzleHttp\Exception\ClientException $exception): ApiResponse
+    {
+        if (! in_array($exception->getCode(), [404, 412])) {
+            throw $exception;
+        }
+
+        return new WithdrawalResponse($exception->getCode(), $exception->getResponse()->getBody()->getContents());
+    }
+
     /**
      * @param null|ResponseInterface $response
      *
@@ -68,14 +77,5 @@ class WithdrawalRequest extends ApiRequest
         $this->numberRequest = $numberRequest;
 
         return $this;
-    }
-
-    public function handleException(\GuzzleHttp\Exception\ClientException $exception): ApiResponse
-    {
-        if ($exception->getCode() != 404) {
-            throw $exception;
-        }
-
-        return new WithdrawalResponse($exception->getCode(), $exception->getResponse()->getBody()->getContents());
     }
 }
