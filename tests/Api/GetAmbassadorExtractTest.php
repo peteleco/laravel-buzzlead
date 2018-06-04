@@ -3,7 +3,6 @@
 namespace Peteleco\Buzzlead\Test\Api;
 
 use Peteleco\Buzzlead\Api\GetAmbassadorExtractRequest;
-use Peteleco\Buzzlead\Exceptions\AmbassadorWithoutConversionsException;
 use Peteleco\Buzzlead\Test\TestCase;
 
 class GetAmbassadorExtractTest extends TestCase
@@ -67,17 +66,31 @@ class GetAmbassadorExtractTest extends TestCase
      */
     public function itGetExtractFromAmbassador()
     {
-        $ambassador = $this->createAmbassador();
-        $this->createConversion($ambassador['voucher']);
-        $this->createConversion($ambassador['voucher']);
+        $ambassador    = $this->createAmbassador();
+        $firstOrderId  = $this->createConversion($ambassador['voucher']);
+        $secondOrderId = $this->createConversion($ambassador['voucher']);
 
         $api = new GetAmbassadorExtractRequest($this->config['buzzlead']);
         $api->setEmailIndicator($ambassador['email']);
         $api->setIdCampaign($this->config['buzzlead']['campaign']);
         $response = $api->send();
+
         $this->assertEquals(2, $response->getConversions()->count(), 'A quantidade de conversões diferem.');
         $this->assertEquals($response->getBalance(), 20);
+        // Expected Json
+        $this->assertJsonStringEqualsJsonString(\GuzzleHttp\json_encode([
+            'unit'         => 'point',
+            'numeroPedido' => $firstOrderId,
+            'totalPercent' => 0,
+            'total'        => 10
+        ]), \GuzzleHttp\json_encode($response->getConversions()->first()->bonus));
 
+        $this->assertJsonStringEqualsJsonString(\GuzzleHttp\json_encode([
+            'unit'         => 'point',
+            'numeroPedido' => $secondOrderId,
+            'totalPercent' => 0,
+            'total'        => 10
+        ]), \GuzzleHttp\json_encode($response->getConversions()->last()->bonus));
     }
 
 }
