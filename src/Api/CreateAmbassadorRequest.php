@@ -52,7 +52,7 @@ class CreateAmbassadorRequest extends ApiRequest
             \GuzzleHttp\RequestOptions::JSON    => [
                 'origem'    => $this->sourceForm->toArray(),
                 'campaign'  => $this->campaignForm->toArray(),
-                'sendEmail' => false,
+                'sendMail' => false,
                 'short'     => false,
             ]
         ]);
