@@ -14,7 +14,7 @@ class GetAmbassadorExtractRequest extends ApiRequest
      *
      * @var string
      */
-    protected $path = '/api/service/{emailUser}/bonus/{emailIndicator}/{idCampaign}';
+    protected $path = '/api/service/{emailUser}/bonus/email/{emailIndicator}/{idCampaign}';
 
     /**
      * @var string
