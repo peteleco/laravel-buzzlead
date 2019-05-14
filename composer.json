@@ -41,5 +41,7 @@
         "Peteleco\\Buzzlead\\BuzzleadServiceProvider"
       ]
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
