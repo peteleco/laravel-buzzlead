@@ -35,3 +35,6 @@ return [
     ]
 ];
 ````
+
+## Changelog
+v0.0.4 Alteração de rota e atributos de retorno na api de extrato de pontos
