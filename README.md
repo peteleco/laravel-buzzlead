@@ -37,5 +37,6 @@ return [
 ````
 
 ## Changelog
+v0.0.6 Correção do retorno do buzzlead
 v0.0.5 Add prefer dist
 v0.0.4 Alteração de rota e atributos de retorno na api de extrato de pontos
