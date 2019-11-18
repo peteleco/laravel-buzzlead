@@ -26,11 +26,12 @@ class GetAmbassadorExtractResponse extends ApiResponse
         if (! isset($json->listaDeBonus)) {
             throw new AmbassadorWithoutConversionsException();
         }
-        if (! isset($json->listaDeBonus->bonus)) {
-            return $this->setConversions(Collection::make());
-        }
+//        if (! isset($json->listaDeBonus->bonus)) {
+//            return $this->setConversions(Collection::make());
+//        }
 
-        return $this->setConversions(Collection::make($json->listaDeBonus->bonus));
+        // return $this->setConversions(Collection::make($json->listaDeBonus->bonus));
+        return $this->setConversions(Collection::make($json->listaDeBonus));
     }
 
     /**
